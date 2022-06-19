@@ -3,7 +3,7 @@ entries:
   mail:
   - apiVersion: v2
     appVersion: v3.5.0
-    created: "2022-03-28T18:40:43.008271209Z"
+    created: "2022-06-19T10:26:16.521931374Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: ac2f5b7f0fdc958ce9a9ff154d8d6a29dc4c8ef07728a29ce91d8941b19363bf
     home: https://github.com/bokysan/docker-postfix
@@ -20,7 +20,7 @@ entries:
     version: v3.5.0
   - apiVersion: v2
     appVersion: v3.4.0
-    created: "2022-03-28T18:40:43.006797642Z"
+    created: "2022-06-19T10:26:16.520328661Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: 9ede715457bb59579a030682b5eac2fd8b12f6afe26bcf6c00c09535ada4bd3d
     home: https://github.com/bokysan/docker-postfix
@@ -37,7 +37,7 @@ entries:
     version: v3.4.0
   - apiVersion: v2
     appVersion: v3.3.1
-    created: "2022-03-28T18:40:43.004778151Z"
+    created: "2022-06-19T10:26:16.51885905Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: 80f925d285e8b49fd43974be2526f1f2d53d9cf5c5081688c45be35a8b0e14f5
     home: https://github.com/bokysan/docker-postfix
@@ -54,7 +54,7 @@ entries:
     version: v3.3.1
   - apiVersion: v2
     appVersion: v3.3.0
-    created: "2022-03-28T18:40:43.002825962Z"
+    created: "2022-06-19T10:26:16.517230737Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: 3431609cb933fe77e5fdc3b885fd587ae562a8479e47dbb3999b0b9084b16931
     home: https://github.com/bokysan/docker-postfix
@@ -71,7 +71,7 @@ entries:
     version: v3.3.0
   - apiVersion: v2
     appVersion: v3.2.1
-    created: "2022-03-28T18:40:43.000970379Z"
+    created: "2022-06-19T10:26:16.515429023Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: 3dcf89b1cda22535cf6da79a9a520a74e956f074583d53faf6af46f7b7bc7a18
     home: https://github.com/bokysan/docker-postfix
@@ -88,7 +88,7 @@ entries:
     version: v3.2.1
   - apiVersion: v2
     appVersion: v3.2.0
-    created: "2022-03-28T18:40:42.995129415Z"
+    created: "2022-06-19T10:26:16.512926304Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: 806c34f4af38e4e87222f93256aa2dd2fa2f5f2faa7fa0d010dccf748203bc86
     home: https://github.com/bokysan/docker-postfix
@@ -105,7 +105,7 @@ entries:
     version: v3.2.0
   - apiVersion: v2
     appVersion: v3.1.1
-    created: "2022-03-28T18:40:42.993440738Z"
+    created: "2022-06-19T10:26:16.51107139Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: a2fecc961db477b48036c38d1de353723e0b152a4f88ebfe0217841b7f245356
     home: https://github.com/bokysan/docker-postfix
@@ -122,7 +122,7 @@ entries:
     version: v3.1.1
   - apiVersion: v2
     appVersion: v3.1.0
-    created: "2022-03-28T18:40:42.991836466Z"
+    created: "2022-06-19T10:26:16.50980208Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: 6a350aeb9707a47d5e884342b3b8aecaf822e36dba27bce9f9110fc13b62d208
     home: https://github.com/bokysan/docker-postfix
@@ -139,7 +139,7 @@ entries:
     version: v3.1.0
   - apiVersion: v2
     appVersion: v3.0.0
-    created: "2022-03-28T18:40:42.990233393Z"
+    created: "2022-06-19T10:26:16.508623271Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: b21fbdb2f9d3d6a61c09e8f4ff937eb5f00d685399ca9b262d6d5efd2302e0eb
     home: https://github.com/bokysan/docker-postfix
@@ -156,7 +156,7 @@ entries:
     version: v3.0.0
   - apiVersion: v2
     appVersion: v2.2.2
-    created: "2022-03-28T18:40:42.988729625Z"
+    created: "2022-06-19T10:26:16.506984258Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: c3db444ccc68260647e696c7236ba2a8cc913613549ed02b297aa78a026cfe79
     home: https://github.com/bokysan/docker-postfix
@@ -173,7 +173,7 @@ entries:
     version: v2.2.2
   - apiVersion: v2
     appVersion: v2.2.1
-    created: "2022-03-28T18:40:42.986649731Z"
+    created: "2022-06-19T10:26:16.505855549Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: bfb57ecdb6acccf1890aa16f02535f91d9558fb441b791f2b37c0bb910f69c76
     home: https://github.com/bokysan/docker-postfix
@@ -190,7 +190,7 @@ entries:
     version: v2.2.1
   - apiVersion: v2
     appVersion: v2.2.0
-    created: "2022-03-28T18:40:42.98530527Z"
+    created: "2022-06-19T10:26:16.503974734Z"
     description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
     digest: f803d3fbb2149d95e296ddd64fe7eb69fbd26262ecc07f41952122d1f7c7bc57
     home: https://github.com/bokysan/docker-postfix
@@ -207,7 +207,7 @@ entries:
     version: v2.2.0
   - apiVersion: v2
     appVersion: v2.1.1
-    created: "2022-03-28T18:40:42.98441003Z"
+    created: "2022-06-19T10:26:16.503140728Z"
     description: Helm chart for Postfix mail server
     digest: 65b86617f8cc581643e7b6530d0f7bff07a46b09c2ad390807b4ede9773a4c80
     name: mail
@@ -215,4 +215,21 @@ entries:
     urls:
     - https://bokysan.github.io/docker-postfix/mail-v2.1.1.tgz
     version: v2.1.1
-generated: "2022-03-28T18:40:42.983280379Z"
+  - apiVersion: v2
+    appVersion: --version
+    created: "2022-06-19T10:26:16.502480923Z"
+    description: An outgoing SMTP mail relay for your applications in Kubernetes cluster
+    digest: ac576b279f10ce7ccf26bd04018510b7e6fd4af5f16785b266c23f86857f46e9
+    home: https://github.com/bokysan/docker-postfix
+    icon: https://bokysan.github.io/docker-postfix/postfix.png
+    maintainers:
+    - name: Bokysan
+      url: https://github.com/bokysan
+    name: mail
+    sources:
+    - https://github.com/bokysan/docker-postfix
+    type: application
+    urls:
+    - https://bokysan.github.io/docker-postfix/mail-v1.0.0.tgz
+    version: v1.0.0
+generated: "2022-06-19T10:26:16.500723009Z"
