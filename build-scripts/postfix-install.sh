@@ -21,11 +21,13 @@ do_ubuntu() {
     export DEBCONF_NOWARNINGS=yes
     export DEBIAN_FRONTEND=noninteractive
     echo "Europe/Berlin" > /etc/timezone
-    apt-get update -y -q
-    apt-get install -y libsasl2-modules sasl2-bin
-    apt-get install -y postfix postfix-pcre
-    apt-get install -y opendkim
-    apt-get install -y ca-certificates tzdata supervisor rsyslog bash opendkim-tools curl libcurl4 libjsoncpp25 sasl2-bin postfix-lmdb procps logrotate cron net-tools ${RELEASE_SPECIFIC_PACKAGES}
+    apt update -y -q
+    apt install -y postfix postfix-lmdb postfix-mysql opendkim opendkim-tools
+    apt install -y postsrsd postfix-policyd-spf-python
+    apt install -y libsasl2-modules sasl2-bin dovecot-core
+    apt install -y ca-certificates tzdata supervisor rsyslog bash rsync
+    apt install -y curl libcurl4 libjsoncpp25 procps logrotate vim-nox less
+    apt install -y cron net-tools mtr traceroute ${RELEASE_SPECIFIC_PACKAGES}
     apt-get clean
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*    
 }

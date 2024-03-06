@@ -47,7 +47,8 @@ RUN        --mount=type=cache,target=/var/cache/apt,sharing=locked,id=var-cache-
 
 # ============================ Prepare main image ============================
 FROM sasl
-LABEL maintainer="Bojan Cekrlic - https://github.com/bokysan/docker-postfix/"
+#LABEL maintainer="Bojan Cekrlic - https://github.com/bokysan/docker-postfix/"
+LABEL maintainer="Ryan Lim - docker@nayrmil.net"
 
 # Set up configuration
 COPY       /configs/supervisord.conf     /etc/supervisord.conf
@@ -56,6 +57,8 @@ COPY       /configs/opendkim.conf        /etc/opendkim/opendkim.conf
 COPY       /configs/smtp_header_checks   /etc/postfix/smtp_header_checks
 COPY       /configs/master.cf            /etc/postfix/master.cf
 COPY       /scripts/*                    /scripts/
+COPY       /configs/dovecot-10-auth.conf    /etc/dovecot/conf.d/10-auth.conf
+COPY       /configs/dovecot-10-master.conf  /etc/dovecot/conf.d/10-master.conf
 
 RUN        chmod +x /scripts/*
 
@@ -67,6 +70,7 @@ USER       root
 WORKDIR    /tmp
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --start-interval=2s --retries=3 CMD /scripts/healthcheck.sh
+#HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 CMD /scripts/healthcheck.sh
 
 EXPOSE     587
 CMD        [ "/bin/sh", "-c", "/scripts/run.sh" ]
