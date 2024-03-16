@@ -436,6 +436,7 @@ auxprop_plugin: sasldb
 mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
 EOF
 		[ ! -d /etc/sasl2 ] && mkdir /etc/sasl2
+		rm -f /etc/postfix/sasl/smtpd.conf
 		ln -s /etc/postfix/sasl/smtpd.conf /etc/sasl2/
 
 		# sasldb2
