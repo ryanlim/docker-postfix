@@ -22,7 +22,8 @@ do_ubuntu() {
     export DEBIAN_FRONTEND=noninteractive
     echo "Europe/Berlin" > /etc/timezone
     apt update -y -q
-    apt install -y postfix postfix-lmdb postfix-mysql opendkim opendkim-tools
+    apt install -y postfix postfix-lmdb postfix-mysql postfix-pcre
+    apt install -y opendkim opendkim-tools
     apt install -y postsrsd postfix-policyd-spf-python
     apt install -y libsasl2-modules sasl2-bin dovecot-core
     apt install -y ca-certificates ssl-cert tzdata supervisor rsyslog bash rsync
