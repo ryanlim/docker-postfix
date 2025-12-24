@@ -59,6 +59,9 @@ COPY       /configs/master.cf            /etc/postfix/master.cf
 COPY       /scripts/*                    /scripts/
 COPY       /configs/dovecot-10-auth.conf    /etc/dovecot/conf.d/10-auth.conf
 COPY       /configs/dovecot-10-master.conf  /etc/dovecot/conf.d/10-master.conf
+COPY       /configs/dovecot-10-ssl.conf /etc/dovecot/conf.d/10-ssl.conf
+COPY       /configs/dovecot-15-mailboxes.conf /etc/dovecot/conf.d/15-mailboxes.conf
+COPY       /configs/dovecot-auth-passwdfile.conf.ext /etc/dovecot/conf.d/auth-passwdfile.conf.ext
 
 RUN        chmod +x /scripts/*
 

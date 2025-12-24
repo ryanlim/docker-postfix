@@ -25,9 +25,9 @@ do_ubuntu() {
     apt install -y postfix postfix-lmdb postfix-mysql postfix-pcre
     apt install -y opendkim opendkim-tools
     apt install -y postsrsd postfix-policyd-spf-python
-    apt install -y libsasl2-modules sasl2-bin dovecot-core
+    apt install -y libsasl2-modules sasl2-bin dovecot-core dovecot-imapd
     apt install -y ca-certificates ssl-cert tzdata supervisor rsyslog bash rsync
-    apt install -y curl libcurl4 libjsoncpp25 procps logrotate vim-nox less
+    apt install -y curl libcurl4 libjsoncpp25 procps logrotate vim-nox less telnet
     apt install -y cron net-tools mtr traceroute ${RELEASE_SPECIFIC_PACKAGES}
     apt-get clean
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*    

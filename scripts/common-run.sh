@@ -18,7 +18,7 @@ setup_timezone() {
 		if [ -f "$TZ_FILE" ]; then
 			notice "Setting container timezone to: ${emphasis}$TZ${reset}"
 			ln -snf "$TZ_FILE" /etc/localtime
-			echo "$TZ" > /etc/timezone
+			echo "$TZ" >/etc/timezone
 		else
 			warn "Cannot set timezone to: ${emphasis}$TZ${reset} -- this timezone does not exist."
 		fi
@@ -90,7 +90,7 @@ setup_conf() {
 }
 
 reown_folders() {
-	mkdir -p /var/spool/postfix/pid /var/spool/postfix/dev /var/spool/postfix/private /var/spool/postfix/public 
+	mkdir -p /var/spool/postfix/pid /var/spool/postfix/dev /var/spool/postfix/private /var/spool/postfix/public
 	if [[ "${SKIP_ROOT_SPOOL_CHOWN}" == "1" ]]; then
 		warn "${emphasis}SKIP_ROOT_SPOOL_CHOWN${reset} is set. Script will not chown ${emphasis}/var/spool/postfix/${reset}. Make sure you know what you're doing."
 	else
@@ -117,14 +117,14 @@ reown_folders() {
 	do_postconf -e "manpage_directory=/usr/share/man"
 
 	# postfix set-permissions complains if documentation files do not exist
-	postfix -c /etc/postfix/ set-permissions > /dev/null 2>&1 || true
+	postfix -c /etc/postfix/ set-permissions >/dev/null 2>&1 || true
 }
 
 postfix_enable_chroot() {
 	# Fix Kubernetes not mounting NSS configuration (https://github.com/kubernetes/kubernetes/issues/71082)
 	if [[ ! -e /etc/nsswitch.conf ]]; then
 		notice "Creating file ${emphasis}/etc/nsswitch.conf${reset}. See https://github.com/kubernetes/kubernetes/issues/71082"
-		if ! echo 'hosts: files dns' > /etc/nsswitch.conf; then
+		if ! echo 'hosts: files dns' >/etc/nsswitch.conf; then
 			warn "Could not write ${emphasis}/etc/nsswitch.conf${reset}. Postfix will still start, but check https://github.com/kubernetes/kubernetes/issues/71082 for more info."
 		fi
 	fi
@@ -145,22 +145,22 @@ postfix_enable_chroot() {
 	fi
 	(
 		umask 022
-		[[ ! -d "$POSTFIXD_ZIF" ]]  && mkdir -pv                  $POSTFIXD_ZIF  || true
-		[[ ! -d "$POSTFIXD_DIR" ]]  && mkdir -pv                  $POSTFIXD_DIR  || true
-		[[ ! -d "$POSTFIXD_ETC" ]]  && mkdir -pv                  $POSTFIXD_ETC  || true
-		if [[ -h /etc/localtime ]]; then
+		[[ ! -d "$POSTFIXD_ZIF" ]] && mkdir -pv $POSTFIXD_ZIF || true
+		[[ ! -d "$POSTFIXD_DIR" ]] && mkdir -pv $POSTFIXD_DIR || true
+		[[ ! -d "$POSTFIXD_ETC" ]] && mkdir -pv $POSTFIXD_ETC || true
+		if [[ -L /etc/localtime ]]; then
 			# Assume it links to ZoneInfo or something that is accessible from chroot
 			echo "Copying ${zoneinfo} -> ${POSTFIXD_ZIF}"
 			cp -fPpr ${zoneinfo}/* ${POSTFIXD_ZIF}/
 			cp -fPpv /etc/localtime "$POSTFIXD_ETC/"
 		fi
-		[[ -e /etc/localtime ]]     && cp -fpv /etc/localtime     $POSTFIXD_ETC  || true
-		[[ -e /etc/nsswitch.conf ]] && cp -fpv /etc/nsswitch.conf $POSTFIXD_ETC  || true
-		[[ -e /etc/resolv.conf ]]   && cp -fpv /etc/resolv.conf   $POSTFIXD_ETC  || true
-		[[ -e /etc/services ]]      && cp -fpv /etc/services      $POSTFIXD_ETC  || true
-		[[ -e /etc/host.conf ]]     && cp -fpv /etc/host.conf     $POSTFIXD_ETC  || true
-		[[ -e /etc/hosts ]]         && cp -fpv /etc/hosts         $POSTFIXD_ETC  || true
-		[[ -e /etc/passwd ]]        && cp -fpv /etc/passwd        $POSTFIXD_ETC  || true
+		[[ -e /etc/localtime ]] && cp -fpv /etc/localtime $POSTFIXD_ETC || true
+		[[ -e /etc/nsswitch.conf ]] && cp -fpv /etc/nsswitch.conf $POSTFIXD_ETC || true
+		[[ -e /etc/resolv.conf ]] && cp -fpv /etc/resolv.conf $POSTFIXD_ETC || true
+		[[ -e /etc/services ]] && cp -fpv /etc/services $POSTFIXD_ETC || true
+		[[ -e /etc/host.conf ]] && cp -fpv /etc/host.conf $POSTFIXD_ETC || true
+		[[ -e /etc/hosts ]] && cp -fpv /etc/hosts $POSTFIXD_ETC || true
+		[[ -e /etc/passwd ]] && cp -fpv /etc/passwd $POSTFIXD_ETC || true
 	) | sed 's/^/        /g'
 }
 
@@ -168,7 +168,7 @@ postfix_upgrade_default_database_type() {
 	# Debian (and Ubuntu?) defalt to "hash:" and "btree:" database types. These have been removed from Alpine due to
 	# licence issues. To ensure compatiblity across images of this service across different distributions, we just
 	# select "lmdb:" as the default database type -- this should be supported in every distro.
-	local default_database_type="$(get_postconf "default_database_type")"	
+	local default_database_type="$(get_postconf "default_database_type")"
 
 	if [[ "${default_database_type}" != "lmdb" ]]; then
 		notice "Switching ${emphasis}default_database_type${reset} to ${emphasis}lmdb${reset} to ensure cross-distro compatibility."
@@ -182,7 +182,7 @@ postfix_upgrade_conf() {
 	local entry
 	local filename
 	local OLD_IFS
-	
+
 	# Check for any references to the old "hash:" and "btree:" databases and replace them with "lmdb:"
 	if cat "$maincf" | egrep -v "^#" | egrep -q "(hash|btree):"; then
 		warn "Detected old hash: and btree: references in the config file, which are not supported anymore. Upgrading to lmdb:"
@@ -212,7 +212,6 @@ postfix_upgrade_conf() {
 postfix_upgrade_daemon_directory() {
 	local dir_debian="/usr/lib/postfix/sbin" # Debian, Ubuntu
 	local dir_alpine="/usr/libexec/postfix"  # Alpine
-
 
 	# Some people will keep the configuration of postfix on an external drive, although this is not strictly neccessary by this
 	# image. And when they switch between different distrubtions (Alpine -> Debian and vice versa), the image will fail with the
@@ -331,10 +330,10 @@ postfix_setup_relayhost() {
 			if [[ -f /etc/postfix/sasl_passwd ]]; then
 				if ! grep -q -F "$SASL_RELAYHOST $RELAYHOST_USERNAME:$RELAYHOST_PASSWORD" /etc/postfix/sasl_passwd; then
 					sed -i -e "/^$SASL_RELAYHOST .*$/d" /etc/postfix/sasl_passwd
-					echo "$SASL_RELAYHOST $RELAYHOST_USERNAME:$RELAYHOST_PASSWORD" >> /etc/postfix/sasl_passwd
+					echo "$SASL_RELAYHOST $RELAYHOST_USERNAME:$RELAYHOST_PASSWORD" >>/etc/postfix/sasl_passwd
 				fi
 			else
-				echo "$SASL_RELAYHOST $RELAYHOST_USERNAME:$RELAYHOST_PASSWORD" >> /etc/postfix/sasl_passwd
+				echo "$SASL_RELAYHOST $RELAYHOST_USERNAME:$RELAYHOST_PASSWORD" >>/etc/postfix/sasl_passwd
 			fi
 			postmap lmdb:/etc/postfix/sasl_passwd
 			chown root:root /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.lmdb
@@ -360,7 +359,7 @@ postfix_setup_xoauth2_pre_setup() {
 	file_env 'XOAUTH2_CLIENT_ID'
 	file_env 'XOAUTH2_SECRET'
 	if [ -n "$XOAUTH2_CLIENT_ID" ] || [ -n "$XOAUTH2_SECRET" ]; then
-		cat <<EOF > /etc/sasl-xoauth2.conf
+		cat <<EOF >/etc/sasl-xoauth2.conf
 {
   "client_id": "${XOAUTH2_CLIENT_ID}",
   "client_secret": "${XOAUTH2_SECRET}",
@@ -385,7 +384,7 @@ EOF
 		fi
 
 		if [ ! -f "/var/spool/postfix/xoauth2-tokens/${RELAYHOST_USERNAME}" ] && [ -n "$XOAUTH2_INITIAL_ACCESS_TOKEN" ] && [ -n "$XOAUTH2_INITIAL_REFRESH_TOKEN" ]; then
-			cat <<EOF > "/var/spool/postfix/xoauth2-tokens/${RELAYHOST_USERNAME}"
+			cat <<EOF >"/var/spool/postfix/xoauth2-tokens/${RELAYHOST_USERNAME}"
 {
 	"access_token" : "${XOAUTH2_INITIAL_ACCESS_TOKEN}",
 	"refresh_token" : "${XOAUTH2_INITIAL_REFRESH_TOKEN}",
@@ -410,11 +409,11 @@ postfix_setup_xoauth2_post_setup() {
 		# plugin, which expect the filename in place of the password. And as the plugin injects itself
 		# automatically in the list of SASL login mechanisms, it tries to read the password as a file and --
 		# naturally -- fails.
-		# 
+		#
 		# The fix is therefore simple: If we're not using OAuth2, we remove the plugin from the list and
 		# keep all the plugins installed.
 
-		if hash saslpluginviewer > /dev/null 2>&1; then
+		if hash saslpluginviewer >/dev/null 2>&1; then
 			# Ubuntu/Debian have renamed pluginviewer to saslpluginviewer so this fails with those distros.
 			plugin_viewer="saslpluginviewer"
 		fi
@@ -428,9 +427,9 @@ postfix_setup_smtpd_sasl_auth() {
 		info "Enable smtpd sasl auth."
 		do_postconf -e "smtpd_sasl_auth_enable=yes"
 		do_postconf -e "broken_sasl_auth_clients=yes"
-		
+
 		[ ! -d /etc/postfix/sasl ] && mkdir /etc/postfix/sasl
-		cat > /etc/postfix/sasl/smtpd.conf <<EOF
+		cat >/etc/postfix/sasl/smtpd.conf <<EOF
 pwcheck_method: auxprop
 auxprop_plugin: sasldb
 mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
@@ -440,16 +439,16 @@ EOF
 		ln -s /etc/postfix/sasl/smtpd.conf /etc/sasl2/
 
 		# sasldb2
-		echo $SMTPD_SASL_USERS | tr , \\n > /tmp/passwd
+		echo $SMTPD_SASL_USERS | tr , \\n >/tmp/passwd
 		while IFS=':' read -r _user _pwd; do
 			echo $_pwd | saslpasswd2 -p -c $_user
-		done < /tmp/passwd
+		done </tmp/passwd
 
 		rm -f /tmp/passwd
 
 		[ -f /etc/sasldb2 ] && chown postfix:postfix /etc/sasldb2
 		[ -f /etc/sasl2/sasldb2 ] && chown postfix:postfix /etc/sasl2/sasldb2
-  		debug 'Sasldb configured'
+		debug 'Sasldb configured'
 	fi
 }
 
@@ -473,15 +472,15 @@ postfix_setup_debugging() {
 
 		sed -i -E 's/^[ \t]*#?[ \t]*LogWhy[ \t]*.+$/LogWhy                  yes/' /etc/opendkim/opendkim.conf
 		if ! egrep -q '^LogWhy' /etc/opendkim/opendkim.conf; then
-			echo >> /etc/opendkim/opendkim.conf
-			echo "LogWhy                  yes" >> /etc/opendkim/opendkim.conf
+			echo >>/etc/opendkim/opendkim.conf
+			echo "LogWhy                  yes" >>/etc/opendkim/opendkim.conf
 		fi
 	else
 		info "Debugging is disabled.${reset}"
 		sed -i -E 's/^[ \t]*#?[ \t]*LogWhy[ \t]*.+$/LogWhy                  no/' /etc/opendkim/opendkim.conf
 		if ! egrep -q '^LogWhy' /etc/opendkim/opendkim.conf; then
-			echo >> /etc/opendkim/opendkim.conf
-			echo "LogWhy                  no" >> /etc/opendkim/opendkim.conf
+			echo >>/etc/opendkim/opendkim.conf
+			echo "LogWhy                  no" >>/etc/opendkim/opendkim.conf
 		fi
 	fi
 }
@@ -490,11 +489,11 @@ postfix_setup_sender_domains() {
 	if [ ! -z "$ALLOWED_SENDER_DOMAINS" ]; then
 		infon "Setting up allowed SENDER domains:"
 		allowed_senders=/etc/postfix/allowed_senders
-		rm -f $allowed_senders $allowed_senders.db > /dev/null
+		rm -f $allowed_senders $allowed_senders.db >/dev/null
 		touch $allowed_senders
 		for i in $ALLOWED_SENDER_DOMAINS; do
 			echo -ne " ${emphasis}$i${reset}"
-			echo -e "$i\tOK" >> $allowed_senders
+			echo -e "$i\tOK" >>$allowed_senders
 		done
 		echo
 		postmap lmdb:$allowed_senders
@@ -617,29 +616,21 @@ postfix_setup_dkim() {
 		do_postconf -e "smtpd_milters=$dkim_socket"
 		do_postconf -e "non_smtpd_milters=$dkim_socket"
 
-		echo > /etc/opendkim/TrustedHosts
-		echo > /etc/opendkim/KeyTable
-		echo > /etc/opendkim/SigningTable
-
-		# Since it's an internal service anyways, it's safe
-		# to assume that *all* hosts are trusted.
-		echo "0.0.0.0/0" > /etc/opendkim/TrustedHosts
-
 		if [ ! -z "$ALLOWED_SENDER_DOMAINS" ]; then
 			for domain in $ALLOWED_SENDER_DOMAINS; do
 				private_key=/etc/opendkim/keys/${domain}.private
 				if [ -f $private_key ]; then
 					domain_dkim_selector="$(get_dkim_selector "${domain}")"
 					echo -e "        ...for domain ${emphasis}${domain}${reset} (selector: ${emphasis}${domain_dkim_selector}${reset})"
-					if ! su opendkim -s /bin/bash -c "cat /etc/opendkim/keys/${domain}.private" > /dev/null 2>&1; then
+					if ! su opendkim -s /bin/bash -c "cat /etc/opendkim/keys/${domain}.private" >/dev/null 2>&1; then
 						echo -e "        ...trying to reown ${emphasis}${private_key}${reset} as it's not readable by OpenDKIM..."
 						# Fixes #39
 						chown opendkim:opendkim "${private_key}"
 						chmod u+r "${private_key}"
 					fi
 
-					echo "${domain_dkim_selector}._domainkey.${domain} ${domain}:${domain_dkim_selector}:${private_key}" >> /etc/opendkim/KeyTable
-					echo "*@${domain} ${domain_dkim_selector}._domainkey.${domain}" >> /etc/opendkim/SigningTable
+					echo "${domain_dkim_selector}._domainkey.${domain} ${domain}:${domain_dkim_selector}:${private_key}" >>/etc/opendkim/KeyTable
+					echo "*@${domain} ${domain_dkim_selector}._domainkey.${domain}" >>/etc/opendkim/SigningTable
 				else
 					error "Skipping DKIM for domain ${emphasis}${domain}${reset}. File ${private_key} not found!"
 				fi
@@ -672,7 +663,7 @@ opendkim_custom_commands() {
 			else
 				info "Adding custom OpenDKIM setting: ${emphasis}${key}=${value}${reset}"
 				echo "Adding ${padded_key}${value}"
-				echo "${padded_key}${value}" >> /etc/opendkim/opendkim.conf
+				echo "${padded_key}${value}" >>/etc/opendkim/opendkim.conf
 			fi
 		else
 			info "Deleting custom OpenDKIM setting: ${emphasis}${key}${reset}"
@@ -713,17 +704,18 @@ execute_post_init_scripts() {
 		notice "Executing any found custom scripts..."
 		for f in /docker-init.db/*; do
 			case "$f" in
-				*.sh)
-					if [[ -x "$f" ]]; then
-						echo -e "\tsourcing ${emphasis}$f${reset}"
-						. "$f"
-					else
-						echo -e "\trunning ${emphasis}bash $f${reset}"
-						bash "$f"
-					fi
-					;;
-				*)
-					echo "$0: ignoring $f" ;;
+			*.sh)
+				if [[ -x "$f" ]]; then
+					echo -e "\tsourcing ${emphasis}$f${reset}"
+					. "$f"
+				else
+					echo -e "\trunning ${emphasis}bash $f${reset}"
+					bash "$f"
+				fi
+				;;
+			*)
+				echo "$0: ignoring $f"
+				;;
 			esac
 		done
 	fi
