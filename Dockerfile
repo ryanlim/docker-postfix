@@ -8,7 +8,7 @@
 # - use Alpine if you're strapped for space. But beware it uses MUSL LIBC, so unicode support might be an issue.
 # - use Debian if you're interested in the greatest cross-platform compatibility. It is larger than Alpine, though.
 # - use Ubuntu if, well, Ubuntu is your thing and you're used to Ubuntu ecosystem.
-ARG BASE_IMAGE=debian:bookworm-slim
+ARG BASE_IMAGE=debian:trixie-slim
 
 FROM ${BASE_IMAGE} AS build-scripts
 COPY ./build-scripts ./build-scripts
@@ -60,6 +60,7 @@ COPY       /scripts/*                    /scripts/
 COPY       /configs/dovecot-10-auth.conf    /etc/dovecot/conf.d/10-auth.conf
 COPY       /configs/dovecot-10-master.conf  /etc/dovecot/conf.d/10-master.conf
 COPY       /configs/dovecot-10-ssl.conf /etc/dovecot/conf.d/10-ssl.conf
+COPY       /configs/dovecot-10-mail.conf    /etc/dovecot/conf.d/10-mail.conf
 COPY       /configs/dovecot-15-mailboxes.conf /etc/dovecot/conf.d/15-mailboxes.conf
 COPY       /configs/dovecot-auth-passwdfile.conf.ext /etc/dovecot/conf.d/auth-passwdfile.conf.ext
 
